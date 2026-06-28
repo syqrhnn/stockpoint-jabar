@@ -162,7 +162,10 @@ class StokService
                 ]);
 
             if ($statusBaru === 'kritis' && $stok->status !== 'kritis') {
-                $this->notifikasiService->kirimPeringatanStokKritis($data['barang_id'], $data['gudang_id'], $saldoSesudah);
+                $rop = $this->getROP($data['barang_id'], $data['gudang_id']);
+                if ($rop !== null) {
+                    $this->notifikasiService->buatNotifikasiKritis($data['barang_id'], $data['gudang_id'], $saldoSesudah, $rop);
+                }
             }
 
             return DB::table('transaksi_stok')->find($transaksiId);

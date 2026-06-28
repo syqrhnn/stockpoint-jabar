@@ -9,33 +9,39 @@ use App\Models\Notifikasi;
 class NotifikasiService
 {
     /**
-     * Mengirimkan notifikasi peringatan stok kritis
+     * Membuat notifikasi peringatan stok kritis jika belum ada yang 'belum_dibaca'
      *
      * @param int $barang_id
      * @param int $gudang_id
-     * @param float|int $saldo
+     * @param int $saldo_aktual
+     * @param float $rop
      * @return void
      */
-    public function kirimPeringatanStokKritis(int $barang_id, int $gudang_id, $saldo): void
+    public function buatNotifikasiKritis(int $barang_id, int $gudang_id, int $saldo_aktual, float $rop): void
     {
+        // Cek apakah sudah ada notifikasi belum dibaca untuk barang & gudang ini
+        $exists = Notifikasi::where('barang_id', $barang_id)
+            ->where('gudang_id', $gudang_id)
+            ->where('status', 'belum_dibaca')
+            ->exists();
+
+        if ($exists) {
+            return; // Hindari duplikasi
+        }
+
         $barang = DB::table('barang')->find($barang_id);
         $gudang = DB::table('gudang')->find($gudang_id);
         
         $namaBarang = $barang ? $barang->nama : "ID {$barang_id}";
         $namaGudang = $gudang ? $gudang->nama : "ID {$gudang_id}";
 
-        $judul = "Stok Kritis: {$namaBarang}";
-        $pesan = "Stok barang {$namaBarang} di gudang {$namaGudang} telah mencapai level KRITIS. Saldo saat ini: {$saldo} unit. Segera lakukan penambahan stok (replenishment).";
+        $pesan = "{$namaBarang} di {$namaGudang} mencapai status KRITIS. Stok tersisa: {$saldo_aktual} unit. ROP: {$rop} unit.";
         
-        Log::warning($pesan);
-        
-        // Simpan ke tabel notifikasi (user_id null = notifikasi global untuk semua admin/manajer)
         Notifikasi::create([
-            'user_id' => null,
-            'judul' => $judul,
+            'barang_id' => $barang_id,
+            'gudang_id' => $gudang_id,
             'pesan' => $pesan,
-            'is_read' => false,
-            'link' => '/stok/catat',
+            'status' => 'belum_dibaca',
         ]);
     }
 }

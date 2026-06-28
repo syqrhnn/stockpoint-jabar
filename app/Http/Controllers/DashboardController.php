@@ -118,13 +118,22 @@ class DashboardController extends Controller
         // 5. NOTIFIKASI
         $qNotif = Notifikasi::orderBy('created_at', 'desc')->limit(5);
         if ($role !== 'admin_gudang' && $role !== 'manajer_operasional') {
-            $qNotif->where(function ($q) use ($request) {
-                $q->whereNull('user_id')->orWhere('user_id', $request->session()->get('user_id'));
-            });
+            $qNotif->where('gudang_id', $session_gudang_id);
         }
         $notifikasi = $qNotif->get();
         
-        $unread_notif = $qNotif->where('is_read', false)->count();
+        $notifikasi->transform(function ($n) {
+            $n->judul = "Peringatan Stok"; // Placeholder judul karena tabel baru tidak punya judul
+            $n->is_read = ($n->status === 'sudah_dibaca');
+            $n->link = route('notifikasi.index'); // Redirect ke notifikasi index
+            return $n;
+        });
+
+        $unread_notif = Notifikasi::where('status', 'belum_dibaca');
+        if ($role !== 'admin_gudang' && $role !== 'manajer_operasional') {
+            $unread_notif->where('gudang_id', $session_gudang_id);
+        }
+        $unread_count = $unread_notif->count();
 
         return response()->json([
             'success' => true,
@@ -144,7 +153,7 @@ class DashboardController extends Controller
                 'keluar' => $chart_keluar
             ],
             'notifikasi' => $notifikasi,
-            'unread_notif' => $unread_notif
+            'unread_notif' => $unread_count
         ]);
     }
 }

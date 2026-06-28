@@ -21,6 +21,7 @@ Route::middleware(['auth.custom', 'role:admin_gudang'])->prefix('admin')->group(
     Route::get('/gudang', [\App\Http\Controllers\GudangController::class, 'viewIndex'])->name('admin.gudang.index');
     Route::get('/supplier', [\App\Http\Controllers\SupplierController::class, 'viewIndex'])->name('admin.supplier.index');
     Route::get('/pengguna', [\App\Http\Controllers\UserController::class, 'viewIndex'])->name('admin.pengguna.index');
+    Route::get('/system-check', [\App\Http\Controllers\SystemCheckController::class, 'index'])->name('admin.system-check');
 
     // Master Data APIs
     Route::prefix('api')->group(function() {
@@ -44,6 +45,10 @@ Route::middleware(['auth.custom', 'role:admin_gudang,kepala_gudang,staf_gudang,m
         Route::get('/catat', [\App\Http\Controllers\StokController::class, 'viewCatat'])->name('stok.catat');
     });
 
+    Route::middleware('role:admin_gudang')->group(function () {
+        Route::get('/opening-balance', [\App\Http\Controllers\OpeningBalanceController::class, 'viewIndex'])->name('stok.opening-balance');
+    });
+
     Route::middleware('role:admin_gudang,kepala_gudang')->group(function () {
         Route::get('/adjustment', [\App\Http\Controllers\StokController::class, 'viewAdjustment'])->name('stok.adjustment');
     });
@@ -60,6 +65,11 @@ Route::middleware(['auth.custom', 'role:admin_gudang,kepala_gudang,staf_gudang,m
 
         Route::middleware('role:admin_gudang,kepala_gudang')->group(function () {
             Route::post('/adjustment', [\App\Http\Controllers\Api\StokApiController::class, 'storeAdjustment']);
+        });
+
+        Route::middleware('role:admin_gudang')->group(function () {
+            Route::get('/opening-balance', [\App\Http\Controllers\OpeningBalanceController::class, 'getData']);
+            Route::post('/opening-balance', [\App\Http\Controllers\OpeningBalanceController::class, 'store']);
         });
     });
 });
@@ -94,3 +104,27 @@ Route::middleware(['auth.custom', 'role:manajer_operasional,admin_gudang'])->pre
 Route::middleware(['auth.custom'])->prefix('api/dashboard')->group(function () {
     Route::get('/summary', [\App\Http\Controllers\DashboardController::class, 'getSummary']);
 });
+
+// NOTIFIKASI
+Route::middleware(['auth.custom'])->group(function () {
+    Route::get('/notifikasi', [\App\Http\Controllers\NotifikasiController::class, 'viewIndex'])->name('notifikasi.index');
+    
+    Route::prefix('api/notifikasi')->group(function () {
+        Route::get('/riwayat', [\App\Http\Controllers\NotifikasiController::class, 'getRiwayat']);
+        Route::get('/unread-count', [\App\Http\Controllers\NotifikasiController::class, 'getUnread']);
+        Route::patch('/mark-all-read', [\App\Http\Controllers\NotifikasiController::class, 'markAllAsRead']);
+        Route::patch('/{id}/read', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead']);
+    });
+});
+
+// LAPORAN
+Route::middleware(['auth.custom'])->group(function () {
+    Route::get('/laporan', [\App\Http\Controllers\LaporanController::class, 'viewIndex'])->name('laporan.index');
+    Route::get('/laporan/{jenis}/export/{format}', [\App\Http\Controllers\LaporanController::class, 'export']);
+    
+    Route::prefix('api/laporan')->group(function () {
+        Route::get('/{jenis}', [\App\Http\Controllers\LaporanController::class, 'getPreview']);
+    });
+});
+
+

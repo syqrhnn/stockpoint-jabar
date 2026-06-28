@@ -10,14 +10,14 @@ return new class extends Migration
     {
         Schema::create('notifikasi', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable(); // nullable untuk global
-            $table->string('judul');
-            $table->text('pesan');
-            $table->boolean('is_read')->default(false);
-            $table->string('link')->nullable();
-            $table->timestamps();
+            $table->unsignedBigInteger('barang_id');
+            $table->unsignedBigInteger('gudang_id');
+            $table->string('pesan');
+            $table->enum('status', ['belum_dibaca', 'sudah_dibaca'])->default('belum_dibaca');
+            $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('barang_id')->references('id')->on('barang')->onDelete('cascade');
+            $table->foreign('gudang_id')->references('id')->on('gudang')->onDelete('cascade');
         });
     }
 

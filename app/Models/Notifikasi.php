@@ -11,16 +11,13 @@ class Notifikasi extends Model
 
     protected $table = 'notifikasi';
 
-    protected $fillable = [
-        'user_id',
-        'judul',
-        'pesan',
-        'is_read',
-        'link',
-    ];
+    // No updated_at in the schema
+    const UPDATED_AT = null;
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+        'barang_id',
+        'gudang_id',
+        'pesan',
+        'status',
+    ];
 }
