@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\Notifikasi;
 
 class NotifikasiService
 {
     /**
      * Mengirimkan notifikasi peringatan stok kritis
-     * Saat ini diimplementasikan sebagai logger (stub)
      *
      * @param int $barang_id
      * @param int $gudang_id
@@ -17,10 +18,24 @@ class NotifikasiService
      */
     public function kirimPeringatanStokKritis(int $barang_id, int $gudang_id, $saldo): void
     {
-        $pesan = "PERINGATAN STOK KRITIS! Barang ID: {$barang_id} di Gudang ID: {$gudang_id} telah mencapai level kritis. Saldo saat ini: {$saldo}.";
+        $barang = DB::table('barang')->find($barang_id);
+        $gudang = DB::table('gudang')->find($gudang_id);
+        
+        $namaBarang = $barang ? $barang->nama : "ID {$barang_id}";
+        $namaGudang = $gudang ? $gudang->nama : "ID {$gudang_id}";
+
+        $judul = "Stok Kritis: {$namaBarang}";
+        $pesan = "Stok barang {$namaBarang} di gudang {$namaGudang} telah mencapai level KRITIS. Saldo saat ini: {$saldo} unit. Segera lakukan penambahan stok (replenishment).";
         
         Log::warning($pesan);
         
-        // TODO: Implementasi notifikasi sistem sesungguhnya (Email/Web Push) dapat dilakukan di sini kelak.
+        // Simpan ke tabel notifikasi (user_id null = notifikasi global untuk semua admin/manajer)
+        Notifikasi::create([
+            'user_id' => null,
+            'judul' => $judul,
+            'pesan' => $pesan,
+            'is_read' => false,
+            'link' => '/stok/catat',
+        ]);
     }
 }

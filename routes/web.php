@@ -14,9 +14,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Group Admin
 Route::middleware(['auth.custom', 'role:admin_gudang'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Master Data Views
     Route::get('/barang', [\App\Http\Controllers\BarangController::class, 'viewIndex'])->name('admin.barang.index');
@@ -66,23 +64,33 @@ Route::middleware(['auth.custom', 'role:admin_gudang,kepala_gudang,staf_gudang,m
     });
 });
 
+// ROP MODULE
+Route::middleware(['auth.custom', 'role:admin_gudang,kepala_gudang,staf_gudang,manajer_operasional'])->prefix('rop')->group(function () {
+    Route::get('/', [\App\Http\Controllers\RopController::class, 'indexView'])->name('rop.index');
+    Route::get('/api/data', [\App\Http\Controllers\RopController::class, 'getData']);
+    
+    // Configuration (Only Admin and Kepala Gudang)
+    Route::middleware('role:admin_gudang,kepala_gudang')->group(function () {
+        Route::post('/api/konfigurasi', [\App\Http\Controllers\RopController::class, 'updateParameter']);
+    });
+});
+
 // Group Kepala Gudang
 Route::middleware(['auth.custom', 'role:kepala_gudang,admin_gudang'])->prefix('kepala')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('kepala.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('kepala.dashboard');
 });
 
 // Group Staf Gudang
 Route::middleware(['auth.custom', 'role:staf_gudang,kepala_gudang,admin_gudang'])->prefix('staf')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('staf.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('staf.dashboard');
 });
 
 // Group Manajer Operasional
 Route::middleware(['auth.custom', 'role:manajer_operasional,admin_gudang'])->prefix('manajer')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('manajer.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('manajer.dashboard');
+});
+
+// DASHBOARD API (All Roles)
+Route::middleware(['auth.custom'])->prefix('api/dashboard')->group(function () {
+    Route::get('/summary', [\App\Http\Controllers\DashboardController::class, 'getSummary']);
 });

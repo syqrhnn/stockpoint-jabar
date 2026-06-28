@@ -43,6 +43,7 @@
                     <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
                     <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
                     <li class="nav-item"><a href="{{ route('stok.adjustment') }}" class="nav-link"><i class="bi bi-sliders"></i> Koreksi Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('rop.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i> ROP & Parameter</a></li>
                     <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                     
                     <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Laporan</li>
@@ -54,6 +55,7 @@
                     <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
                     <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
                     <li class="nav-item"><a href="{{ route('stok.adjustment') }}" class="nav-link"><i class="bi bi-sliders"></i> Koreksi Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('rop.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i> ROP & Parameter</a></li>
                     <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 
                 @elseif($role === 'staf_gudang')
@@ -61,12 +63,14 @@
                     
                     <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
                     <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('rop.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i> Status ROP</a></li>
                     <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 
                 @elseif($role === 'manajer_operasional')
                     <li class="nav-item"><a href="/manajer/dashboard" class="nav-link {{ request()->is('manajer/dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                     
                     <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Laporan</li>
+                    <li class="nav-item"><a href="{{ route('rop.index') }}" class="nav-link"><i class="bi bi-graph-up-arrow"></i> Dashboard ROP</a></li>
                     <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 @endif
             </ul>

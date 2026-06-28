@@ -257,27 +257,24 @@ class StokService
     }
 
     /**
-     * Menghitung Reorder Point (ROP)
-     * (ADU × lead_time) + safety_stock
+     * Menghitung Reorder Point (ROP) secara statis dari DB
      * 
      * @param int $barang_id
      * @param int $gudang_id
      * @return float|null Null jika parameter belum dikonfigurasi
      */
-    public function hitungROP(int $barang_id, int $gudang_id): ?float
+    public function getROP(int $barang_id, int $gudang_id): ?float
     {
         $parameter = DB::table('rop_parameter')
             ->where('barang_id', $barang_id)
             ->where('gudang_id', $gudang_id)
             ->first();
 
-        if (!$parameter) {
+        if (!$parameter || is_null($parameter->rop)) {
             return null;
         }
 
-        $adu = $this->hitungADU($barang_id, $gudang_id);
-        
-        return ($adu * $parameter->lead_time) + $parameter->safety_stock;
+        return (float) $parameter->rop;
     }
 
     /**
@@ -290,7 +287,7 @@ class StokService
      */
     public function evaluasiStatusStok(int $barang_id, int $gudang_id, ?int $saldoTerkini = null): string
     {
-        $rop = $this->hitungROP($barang_id, $gudang_id);
+        $rop = $this->getROP($barang_id, $gudang_id);
 
         if (is_null($rop)) {
             return 'belum_dikonfigurasi';
@@ -310,5 +307,59 @@ class StokService
         }
 
         return 'aman';
+    }
+
+    /**
+     * Simpan Parameter ROP
+     * 
+     * @param array $data ['barang_id', 'gudang_id', 'lead_time', 'safety_stock']
+     * @param object $user
+     */
+    public function simpanParameterRop(array $data, $user)
+    {
+        return DB::transaction(function () use ($data, $user) {
+            $this->validasiAksesGudang($data['gudang_id'], $user);
+
+            $adu = $this->hitungADU($data['barang_id'], $data['gudang_id']);
+            $rop = ($adu * $data['lead_time']) + $data['safety_stock'];
+
+            DB::table('rop_parameter')->updateOrInsert(
+                ['barang_id' => $data['barang_id'], 'gudang_id' => $data['gudang_id']],
+                [
+                    'adu' => $adu,
+                    'lead_time' => $data['lead_time'],
+                    'safety_stock' => $data['safety_stock'],
+                    'rop' => $rop,
+                    'updated_by' => $user->id,
+                    'updated_at' => now(),
+                ]
+            );
+
+            // Re-evaluasi stok
+            $stok = $this->getOrCreateStok($data['barang_id'], $data['gudang_id']);
+            $statusBaru = $this->evaluasiStatusStok($data['barang_id'], $data['gudang_id'], $stok->saldo);
+            
+            DB::table('stok')
+                ->where('barang_id', $data['barang_id'])
+                ->where('gudang_id', $data['gudang_id'])
+                ->update(['status' => $statusBaru, 'updated_at' => now()]);
+
+            $parameterId = DB::table('rop_parameter')
+                ->where('barang_id', $data['barang_id'])
+                ->where('gudang_id', $data['gudang_id'])
+                ->value('id');
+
+            DB::table('log_audit')->insert([
+                'user_id' => $user->id,
+                'tabel_terdampak' => 'rop_parameter',
+                'record_id' => $parameterId,
+                'aksi' => 'Ubah Parameter ROP',
+                'catatan' => "Set Lead Time: {$data['lead_time']}, Safety Stock: {$data['safety_stock']} -> ROP: {$rop}",
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return ['adu' => $adu, 'rop' => $rop, 'status' => $statusBaru];
+        });
     }
 }
