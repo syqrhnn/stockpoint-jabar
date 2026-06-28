@@ -14,6 +14,16 @@ class AuthMiddleware
             return redirect('/login');
         }
 
+        // Check if user is active
+        $isActive = \Illuminate\Support\Facades\DB::table('users')
+            ->where('id', session('user_id'))
+            ->value('is_active');
+
+        if (!$isActive) {
+            session()->flush();
+            return redirect('/login')->withErrors(['error' => 'Akun Anda telah dinonaktifkan.']);
+        }
+
         return $next($request);
     }
 }

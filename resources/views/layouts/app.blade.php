@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - StockPoint Jabar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -25,10 +26,10 @@
                 
                 @if($role === 'admin_gudang')
                     <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-box"></i> Data Barang</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-building"></i> Data Gudang</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-truck"></i> Data Supplier</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-people"></i> Manajemen Pengguna</a></li>
+                    <li class="nav-item"><a href="{{ route('admin.barang.index') }}" class="nav-link"><i class="bi bi-box"></i> Data Barang</a></li>
+                    <li class="nav-item"><a href="{{ route('admin.gudang.index') }}" class="nav-link"><i class="bi bi-building"></i> Data Gudang</a></li>
+                    <li class="nav-item"><a href="{{ route('admin.supplier.index') }}" class="nav-link"><i class="bi bi-truck"></i> Data Supplier</a></li>
+                    <li class="nav-item"><a href="{{ route('admin.pengguna.index') }}" class="nav-link"><i class="bi bi-people"></i> Manajemen Pengguna</a></li>
                     <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
                 
                 @elseif($role === 'kepala_gudang')
@@ -83,5 +84,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+        <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showToast(message, type = 'success') {
+            const toastEl = document.getElementById('liveToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastEl.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
+            
+            if(type === 'success') toastEl.classList.add('bg-success');
+            else if(type === 'error') toastEl.classList.add('bg-danger');
+            else if(type === 'warning') toastEl.classList.add('bg-warning');
+            else toastEl.classList.add('bg-info');
+
+            toastMessage.textContent = message;
+            
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    </script>
+    @stack('scripts')
 </body>
 </html>

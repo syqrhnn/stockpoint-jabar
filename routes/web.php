@@ -17,6 +17,24 @@ Route::middleware(['auth.custom', 'role:admin_gudang'])->prefix('admin')->group(
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('admin.dashboard');
+
+    // Master Data Views
+    Route::get('/barang', [\App\Http\Controllers\BarangController::class, 'viewIndex'])->name('admin.barang.index');
+    Route::get('/gudang', [\App\Http\Controllers\GudangController::class, 'viewIndex'])->name('admin.gudang.index');
+    Route::get('/supplier', [\App\Http\Controllers\SupplierController::class, 'viewIndex'])->name('admin.supplier.index');
+    Route::get('/pengguna', [\App\Http\Controllers\UserController::class, 'viewIndex'])->name('admin.pengguna.index');
+
+    // Master Data APIs
+    Route::prefix('api')->group(function() {
+        Route::apiResource('barang', \App\Http\Controllers\BarangController::class)->except(['show']);
+        Route::apiResource('gudang', \App\Http\Controllers\GudangController::class)->except(['show']);
+        Route::apiResource('supplier', \App\Http\Controllers\SupplierController::class)->except(['show']);
+        
+        // Users API
+        Route::get('/pengguna/gudang-list', [\App\Http\Controllers\UserController::class, 'getGudangList']);
+        Route::apiResource('pengguna', \App\Http\Controllers\UserController::class)->except(['show']);
+        Route::patch('/pengguna/{id}/deactivate', [\App\Http\Controllers\UserController::class, 'deactivate']);
+    });
 });
 
 // Group Kepala Gudang
