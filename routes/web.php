@@ -37,6 +37,35 @@ Route::middleware(['auth.custom', 'role:admin_gudang'])->prefix('admin')->group(
     });
 });
 
+// STOK MANAGEMENT (Various Roles)
+Route::middleware(['auth.custom', 'role:admin_gudang,kepala_gudang,staf_gudang,manajer_operasional'])->prefix('stok')->group(function () {
+    // Views
+    Route::get('/riwayat', [\App\Http\Controllers\StokController::class, 'viewRiwayat'])->name('stok.riwayat');
+
+    Route::middleware('role:admin_gudang,kepala_gudang,staf_gudang')->group(function () {
+        Route::get('/catat', [\App\Http\Controllers\StokController::class, 'viewCatat'])->name('stok.catat');
+    });
+
+    Route::middleware('role:admin_gudang,kepala_gudang')->group(function () {
+        Route::get('/adjustment', [\App\Http\Controllers\StokController::class, 'viewAdjustment'])->name('stok.adjustment');
+    });
+
+    // API
+    Route::prefix('api')->group(function () {
+        Route::get('/riwayat', [\App\Http\Controllers\Api\StokApiController::class, 'getRiwayat']);
+        Route::get('/saldo', [\App\Http\Controllers\Api\StokApiController::class, 'getSaldo']);
+
+        Route::middleware('role:admin_gudang,kepala_gudang,staf_gudang')->group(function () {
+            Route::post('/masuk', [\App\Http\Controllers\Api\StokApiController::class, 'storeMasuk']);
+            Route::post('/keluar', [\App\Http\Controllers\Api\StokApiController::class, 'storeKeluar']);
+        });
+
+        Route::middleware('role:admin_gudang,kepala_gudang')->group(function () {
+            Route::post('/adjustment', [\App\Http\Controllers\Api\StokApiController::class, 'storeAdjustment']);
+        });
+    });
+});
+
 // Group Kepala Gudang
 Route::middleware(['auth.custom', 'role:kepala_gudang,admin_gudang'])->prefix('kepala')->group(function () {
     Route::get('/dashboard', function () {

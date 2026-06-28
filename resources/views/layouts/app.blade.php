@@ -5,47 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - StockPoint Jabar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .sidebar { min-height: 100vh; background-color: #343a40; color: #fff; }
-        .sidebar a { color: #adb5bd; text-decoration: none; padding: 10px 15px; display: block; }
-        .sidebar a:hover { color: #fff; background-color: #495057; }
-        .sidebar .active { color: #fff; background-color: #0d6efd; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .sidebar { min-height: 100vh; background-color: #ffffff; border-right: 1px solid #e9ecef; }
+        .nav-link { color: #495057; font-weight: 500; padding: 10px 20px; border-radius: 8px; margin-bottom: 5px; }
+        .nav-link:hover, .nav-link.active { background-color: #e7f1ff; color: #0d6efd; }
+        .nav-link i { margin-right: 10px; }
+        .topbar { background-color: #ffffff; border-bottom: 1px solid #e9ecef; }
     </style>
 </head>
 <body>
+    @php
+        $role = session('role');
+        $nama = session('nama');
+    @endphp
+
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-3" style="width: 250px;">
-            <h4 class="text-center mb-4">StockPoint</h4>
-            
-            <ul class="nav flex-column">
-                @php $role = session('role'); @endphp
-                
+        <div class="sidebar p-3" style="width: 280px;">
+            <a href="/" class="d-flex align-items-center mb-4 text-decoration-none text-dark">
+                <span class="fs-4 fw-bold text-primary"><i class="bi bi-box-seam"></i> StockPoint Jabar</span>
+            </a>
+            <hr>
+            <ul class="nav flex-column mb-auto">
                 @if($role === 'admin_gudang')
-                    <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="/admin/dashboard" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Master Data</li>
                     <li class="nav-item"><a href="{{ route('admin.barang.index') }}" class="nav-link"><i class="bi bi-box"></i> Data Barang</a></li>
                     <li class="nav-item"><a href="{{ route('admin.gudang.index') }}" class="nav-link"><i class="bi bi-building"></i> Data Gudang</a></li>
                     <li class="nav-item"><a href="{{ route('admin.supplier.index') }}" class="nav-link"><i class="bi bi-truck"></i> Data Supplier</a></li>
                     <li class="nav-item"><a href="{{ route('admin.pengguna.index') }}" class="nav-link"><i class="bi bi-people"></i> Manajemen Pengguna</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
+                    <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('stok.adjustment') }}" class="nav-link"><i class="bi bi-sliders"></i> Koreksi Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Laporan</li>
                     <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
                 
                 @elseif($role === 'kepala_gudang')
-                    <li class="nav-item"><a href="{{ route('kepala.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-journal-text"></i> Pencatatan Stok</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-gear"></i> ROP & Parameter</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
+                    <li class="nav-item"><a href="/kepala/dashboard" class="nav-link {{ request()->is('kepala/dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
+                    <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('stok.adjustment') }}" class="nav-link"><i class="bi bi-sliders"></i> Koreksi Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 
                 @elseif($role === 'staf_gudang')
-                    <li class="nav-item"><a href="{{ route('staf.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-journal-text"></i> Pencatatan Stok</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
+                    <li class="nav-item"><a href="/staf/dashboard" class="nav-link {{ request()->is('staf/dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Operasional</li>
+                    <li class="nav-item"><a href="{{ route('stok.catat') }}" class="nav-link"><i class="bi bi-journal-plus"></i> Catat Stok</a></li>
+                    <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 
                 @elseif($role === 'manajer_operasional')
-                    <li class="nav-item"><a href="{{ route('manajer.dashboard') }}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
+                    <li class="nav-item"><a href="/manajer/dashboard" class="nav-link {{ request()->is('manajer/dashboard') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                    
+                    <li class="nav-item mt-3 mb-1 text-muted small fw-bold text-uppercase px-3">Laporan</li>
+                    <li class="nav-item"><a href="{{ route('stok.riwayat') }}" class="nav-link"><i class="bi bi-clock-history"></i> Riwayat Transaksi</a></li>
                 @endif
             </ul>
         </div>

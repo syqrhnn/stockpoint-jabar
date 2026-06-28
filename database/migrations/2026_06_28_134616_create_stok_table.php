@@ -9,13 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stok', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('barang_id');
             $table->unsignedBigInteger('gudang_id');
-            $table->integer('saldo')->default(0);
+            $table->unsignedInteger('saldo')->default(0); // unsignedInteger to prevent negative values at DB level
             $table->enum('status', ['aman', 'menipis', 'kritis', 'belum_dikonfigurasi'])->default('belum_dikonfigurasi');
             $table->timestamps();
 
-            $table->primary(['barang_id', 'gudang_id']);
+            $table->unique(['barang_id', 'gudang_id']);
             $table->foreign('barang_id')->references('id')->on('barang')->onDelete('cascade');
             $table->foreign('gudang_id')->references('id')->on('gudang')->onDelete('cascade');
         });

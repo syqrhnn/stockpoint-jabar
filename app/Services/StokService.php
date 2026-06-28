@@ -94,7 +94,6 @@ class StokService
                 'tanggal' => $data['tanggal'],
                 'catatan' => $data['catatan'] ?? null,
                 'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
             DB::table('stok')
@@ -149,7 +148,6 @@ class StokService
                 'tanggal' => $data['tanggal'],
                 'catatan' => $data['catatan'] ?? null,
                 'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
             $statusBaru = $this->evaluasiStatusStok($data['barang_id'], $data['gudang_id'], $saldoSesudah);
@@ -208,7 +206,6 @@ class StokService
                 'tanggal' => now()->toDateString(),
                 'catatan' => $data['catatan'],
                 'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
             DB::table('stok')

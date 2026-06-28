@@ -12,17 +12,18 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('barang_id');
             $table->unsignedBigInteger('gudang_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('supplier_id')->nullable();
-            
             $table->enum('jenis', ['masuk', 'keluar', 'adjustment']);
             $table->integer('jumlah');
             $table->integer('saldo_sebelum');
             $table->integer('saldo_sesudah');
             $table->date('tanggal');
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->text('catatan')->nullable();
             
-            $table->timestamps();
+            // Transaksi stok is immutable, we don't need updated_at, but created_at is required.
+            // Using timestamps() creates both, we can just use timestamp('created_at')
+            $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('barang_id')->references('id')->on('barang')->onDelete('cascade');
             $table->foreign('gudang_id')->references('id')->on('gudang')->onDelete('cascade');
