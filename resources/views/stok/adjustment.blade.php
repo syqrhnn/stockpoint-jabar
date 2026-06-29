@@ -132,7 +132,7 @@
             let bid = aBarang.value;
 
             if (gid && bid) {
-                fetch(`/api/stok/saldo?gudang_id=${gid}&barang_id=${bid}`)
+                fetch(`/stok/api/saldo?gudang_id=${gid}&barang_id=${bid}`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
@@ -197,7 +197,7 @@
                 catatan: aCatatan.value
             };
 
-            fetch('/api/stok/adjustment', {
+            fetch('/stok/api/adjustment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -115,7 +115,7 @@
 
             tableBody.innerHTML = `<tr><td colspan="9" class="text-center py-4"><div class="spinner-border text-primary spinner-border-sm" role="status"></div> Memuat...</td></tr>`;
 
-            fetch(`/api/stok/riwayat?${params.toString()}`)
+            fetch(`/stok/api/riwayat?${params.toString()}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {

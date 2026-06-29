@@ -186,7 +186,7 @@
             let bid = kBarang.value;
 
             if (gid && bid) {
-                fetch(`/api/stok/saldo?gudang_id=${gid}&barang_id=${bid}`)
+                fetch(`/stok/api/saldo?gudang_id=${gid}&barang_id=${bid}`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
@@ -272,8 +272,8 @@
             });
         }
 
-        submitForm('formMasuk', '/api/stok/masuk');
-        submitForm('formKeluar', '/api/stok/keluar');
+        submitForm('formMasuk', '/stok/api/masuk');
+        submitForm('formKeluar', '/stok/api/keluar');
     });
 </script>
 @endsection
