@@ -1,0 +1,326 @@
+/**
+ * StockPoint Jabar - Design System
+ * Precision Tool Aesthetic (Data-dense, Clean, Fast)
+ */
+
+ :root {
+    /* 1. BRAND COLORS */
+    --sp-primary: #1E40AF;
+    --sp-primary-light: #3B82F6;
+    --sp-accent: #10B981;
+    --sp-warning: #F59E0B;
+    --sp-danger: #EF4444;
+    
+    /* 2. NEUTRAL & SURFACE COLORS */
+    --sp-bg: #F8FAFC;
+    --sp-surface: #FFFFFF;
+    --sp-border: #E2E8F0;
+    
+    /* 3. TEXT COLORS */
+    --sp-text-primary: #0F172A;
+    --sp-text-secondary: #64748B;
+    
+    /* 4. SIDEBAR (DARK THEME) */
+    --sp-sidebar-bg: #0F172A;
+    --sp-sidebar-text: #CBD5E1;
+    
+    /* =========================================================
+       BOOTSTRAP OVERRIDES (via CSS Custom Properties)
+       ========================================================= */
+    --bs-primary: var(--sp-primary);
+    --bs-primary-rgb: 30, 64, 175;
+    
+    --bs-success: var(--sp-accent);
+    --bs-success-rgb: 16, 185, 129;
+    
+    --bs-warning: var(--sp-warning);
+    --bs-warning-rgb: 245, 158, 11;
+    
+    --bs-danger: var(--sp-danger);
+    --bs-danger-rgb: 239, 68, 68;
+    
+    --bs-info: var(--sp-primary-light);
+    --bs-info-rgb: 59, 130, 246;
+
+    --bs-body-bg: var(--sp-bg);
+    --bs-body-color: var(--sp-text-primary);
+    
+    --bs-secondary-color: var(--sp-text-secondary);
+    --bs-border-color: var(--sp-border);
+    --bs-border-color-translucent: rgba(226, 232, 240, 0.65);
+    
+    --bs-font-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-body-font-weight: 400;
+}
+
+/* =========================================================
+   GLOBAL TYPOGRAPHY & LAYOUT
+   ========================================================= */
+body {
+    background-color: var(--sp-bg);
+    color: var(--sp-text-primary);
+    font-family: var(--bs-font-sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display / Besar */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+    font-weight: 700;
+    color: var(--sp-text-primary);
+    letter-spacing: -0.02em;
+}
+
+/* Text helpers override */
+.text-muted, .text-secondary {
+    color: var(--sp-text-secondary) !important;
+}
+
+/* =========================================================
+   SIDEBAR NAV
+   ========================================================= */
+.sidebar {
+    background-color: var(--sp-sidebar-bg) !important;
+    border-right: none !important;
+    color: var(--sp-sidebar-text);
+}
+
+.sidebar a.navbar-brand,
+.sidebar .text-dark,
+.sidebar .text-primary {
+    color: #ffffff !important;
+}
+
+.sidebar hr {
+    border-color: rgba(255,255,255,0.1);
+}
+
+.sidebar .nav-link {
+    color: var(--sp-sidebar-text) !important;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    transition: all 150ms ease-in-out;
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link i {
+    opacity: 0.7;
+    transition: opacity 150ms ease-in-out;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #ffffff !important;
+}
+
+.sidebar .nav-link:hover i {
+    opacity: 1;
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--sp-primary) !important;
+    color: #ffffff !important;
+    border-left: 3px solid var(--sp-primary-light);
+    border-radius: 0 6px 6px 0; /* Flat on the left where border is */
+}
+
+.sidebar .nav-link.active i {
+    opacity: 1;
+}
+
+.sidebar .text-uppercase {
+    color: #94A3B8 !important; /* Slightly lighter than secondary for dark bg */
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+.navbar {
+    background-color: var(--sp-surface) !important;
+    border-bottom: 1px solid var(--sp-border) !important;
+}
+
+/* =========================================================
+   CARDS (Surface)
+   ========================================================= */
+.card {
+    background-color: var(--sp-surface);
+    border: 1px solid var(--sp-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important; /* Subtle shadow */
+}
+
+.card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--sp-border) !important;
+    padding: 1rem 1.25rem !important;
+}
+
+.card-body {
+    padding: 1.25rem !important; /* Data dense, not too sparse */
+}
+
+/* Summary Cards (from dashboard) */
+/* Re-styling `.bg-primary`, `.bg-light` in cards to match precise aesthetic */
+.card.bg-primary {
+    background: linear-gradient(135deg, var(--sp-primary) 0%, #17328A 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2), 0 2px 4px -1px rgba(30, 64, 175, 0.1) !important;
+}
+.card.bg-light {
+    background-color: #F1F5F9 !important; /* Slate 100 instead of default light */
+    border: 1px solid var(--sp-border) !important;
+}
+
+/* =========================================================
+   DATA DENSITY (TABLES)
+   ========================================================= */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--sp-text-secondary);
+    border-bottom: 2px solid var(--sp-border);
+    padding: 0.75rem 1rem !important;
+    background-color: var(--sp-bg) !important;
+}
+
+.table td {
+    padding: 0.6rem 1rem !important; /* Compact padding */
+    vertical-align: middle;
+    border-bottom: 1px solid var(--sp-border);
+    color: var(--sp-text-primary);
+}
+
+.table-hover tbody tr {
+    transition: background-color 150ms ease;
+}
+.table-hover tbody tr:hover td {
+    background-color: #F8FAFC !important;
+}
+
+/* Numbers in table and cards */
+.table td.text-center, 
+.table td.text-end,
+.table td:nth-child(n+3), /* usually columns 3+ are numbers in this dashboard */
+.display-5,
+.fs-5 {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    font-weight: 600;
+}
+
+/* Fix specific table text alignments if needed by tabular-nums */
+.table td .badge {
+    font-variant-numeric: normal;
+}
+
+/* =========================================================
+   BADGES & STATUS
+   ========================================================= */
+.badge {
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+}
+
+.badge.bg-danger {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: var(--sp-danger) !important;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge.bg-warning {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #B45309 !important; /* Darker warning for text contrast */
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge.bg-success {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: var(--sp-accent) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge.bg-primary {
+    background-color: rgba(30, 64, 175, 0.15) !important;
+    color: var(--sp-primary) !important;
+    border: 1px solid rgba(30, 64, 175, 0.2);
+}
+
+.badge.bg-secondary {
+    background-color: #F1F5F9 !important;
+    color: var(--sp-text-secondary) !important;
+    border: 1px solid var(--sp-border);
+}
+
+/* Exceptions for Notification Bell Badge (Solid) */
+.btn .badge.bg-danger,
+.card-header .badge.bg-danger {
+    background-color: var(--sp-danger) !important;
+    color: #fff !important;
+    border: none;
+}
+
+/* =========================================================
+   BUTTONS & FORMS
+   ========================================================= */
+.btn {
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    transition: all 150ms ease;
+    box-shadow: none !important;
+}
+
+.btn-primary {
+    background-color: var(--sp-primary) !important;
+    border-color: var(--sp-primary) !important;
+    color: #fff !important;
+}
+.btn-primary:hover {
+    background-color: #17328A !important; /* Darker primary */
+    border-color: #17328A !important;
+}
+
+.btn-outline-primary {
+    color: var(--sp-primary) !important;
+    border-color: var(--sp-border) !important;
+    background-color: var(--sp-surface) !important;
+}
+.btn-outline-primary:hover {
+    background-color: #F1F5F9 !important;
+    border-color: var(--sp-primary-light) !important;
+    color: var(--sp-primary) !important;
+}
+
+.form-control, .form-select {
+    border-color: var(--sp-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    color: var(--sp-text-primary);
+    background-color: var(--sp-surface);
+    transition: all 150ms ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--sp-primary-light);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
+}
+
+/* Utility Colors for text */
+.text-danger { color: var(--sp-danger) !important; }
+.text-warning { color: var(--sp-warning) !important; }
+.text-success { color: var(--sp-accent) !important; }
+.text-primary { color: var(--sp-primary) !important; }

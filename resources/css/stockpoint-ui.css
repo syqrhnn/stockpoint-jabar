@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap');
+
+:root {
+    /* Color Palette */
+    --sp-primary: #3b82f6;
+    --sp-primary-hover: #2563eb;
+    --sp-primary-bg: #eff6ff;
+    
+    --sp-success: #10b981;
+    --sp-warning: #f59e0b;
+    --sp-danger: #ef4444;
+    
+    --sp-bg-color: #f4f7fa;
+    --sp-card-bg: #ffffff;
+    
+    --sp-text-main: #1f2937;
+    --sp-text-muted: #6b7280;
+    --sp-border-color: #e5e7eb;
+    
+    /* Shadows & Effects */
+    --sp-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
+    --sp-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --sp-radius-lg: 16px;
+    --sp-radius-md: 12px;
+    --sp-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem; /* Reduced from default */
+    background-color: var(--sp-bg-color);
+    color: var(--sp-text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand, .fw-bold {
+    font-family: 'Outfit', sans-serif;
+    color: var(--sp-text-main);
+}
+
+/* Sidebar Styling */
+.sidebar {
+    background-color: var(--sp-card-bg);
+    border-right: 1px solid var(--sp-border-color);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.01);
+    z-index: 1000;
+}
+
+.sidebar .nav-link {
+    color: var(--sp-text-muted);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 10px 18px;
+    border-radius: var(--sp-radius-md);
+    margin: 4px 16px;
+    transition: var(--sp-transition);
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link i {
+    margin-right: 12px;
+    font-size: 1.15rem;
+    transition: var(--sp-transition);
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--sp-primary-bg);
+    color: var(--sp-primary);
+    transform: translateX(4px);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--sp-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.sidebar .nav-link.active i {
+    color: white;
+}
+
+/* Topbar Styling */
+.topbar {
+    background-color: var(--sp-card-bg);
+    border-bottom: 1px solid var(--sp-border-color);
+    padding: 12px 24px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Card Enhancements (Glassmorphism & Shadows) */
+.card {
+    border: none !important;
+    border-radius: var(--sp-radius-lg) !important;
+    background: var(--sp-card-bg);
+    box-shadow: var(--sp-shadow-soft) !important;
+    transition: var(--sp-transition);
+}
+
+.card:hover {
+    box-shadow: var(--sp-shadow-hover) !important;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--sp-border-color);
+    padding: 20px 24px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* Buttons Micro-animations */
+.btn {
+    border-radius: var(--sp-radius-md);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: var(--sp-transition);
+}
+
+.btn-primary {
+    background-color: var(--sp-primary);
+    border-color: var(--sp-primary);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--sp-primary-hover);
+    border-color: var(--sp-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Input Forms */
+.form-control, .form-select {
+    border-radius: var(--sp-radius-md);
+    border: 1px solid var(--sp-border-color);
+    padding: 10px 16px;
+    transition: var(--sp-transition);
+    background-color: #f9fafb;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #ffffff;
+    border-color: var(--sp-primary);
+    box-shadow: 0 0 0 4px var(--sp-primary-bg);
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+.table th {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--sp-text-muted);
+    border-bottom-width: 1px;
+    padding: 16px;
+}
+.table td {
+    vertical-align: middle;
+    padding: 16px;
+    border-bottom: 1px solid var(--sp-border-color);
+}
+.table-hover tbody tr {
+    transition: var(--sp-transition);
+}
+.table-hover tbody tr:hover {
+    background-color: var(--sp-bg-color) !important;
+    transform: scale(1.002);
+}
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; 
+}
