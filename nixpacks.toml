@@ -1,0 +1,2 @@
+[variables]
+NIXPACKS_PHP_EXTENSIONS = "gd,pdo_mysql,mbstring,openssl,xml,zip,curl,fileinfo"
